@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>01 - Javascript drum kit</title>
+    </head>
+    <body>
+        <audio id="ah-audio" src="assets/aaaahh.wav" crossorigin="anonymous"></audio>
+        <audio id="allright-audio" src="assets/all_right.wav" crossorigin="anonymous"></audio>
+        <audio id="crap-audio" src="assets/aw_crap.wav" crossorigin="anonymous"></audio>
+        <audio id="beer-audio" src="assets/beer01.wav" crossorigin="anonymous"></audio>
+        <audio id="blah-audio" src="assets/blah1.wav" crossorigin="anonymous"></audio>
+        <audio id="doh-audio" src="assets/doh1_y.wav" crossorigin="anonymous"></audio>
+
+        <div class="button_container">
+            <button data-audio="ah">Aaaahh</button>
+            <button data-audio="allright">Allright</button>
+            <button data-audio="crap">Aw crap</button>
+            <button data-audio="beer">Beer</button>
+            <button data-audio="blah">Blah</button>
+            <button data-audio="doh">Doh</button>
+        </div>
+    </body>
+    <script type="text/javascript">
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioContext;
+        var audioLoaded = false;
+
+        const audio = {
+            ah: '#ah-audio',
+            allright: '#allright-audio',
+            crap: '#crap-audio',
+            beer: '#beer-audio',
+            blah: '#blah-audio',
+            doh: '#doh-audio'
+        };
+
+        const buttons = {
+            ah: '#ah-button',
+            allright: '#allright-button',
+            crap: '#crap-button',
+            beer: '#beer-button',
+            blah: '#blah-button',
+            doh: '#doh-button'
+        }
+
+        for (const button in buttons) {
+            const buttonElement = document.querySelector(buttons[button]);
+            buttonElement.addEventListener('click', (e) => {
+                if(audioLoaded) {
+                    const source = audioContext.createMediaElementSource(audio);
+                    source.connect(audioContext.destination);
+                } else {
+                    loadAudio();
+                    const source = audioContext.createMediaElementSource(audio);
+                    source.connect(audioContext.destination);
+                }
+                console.log(e);
+            });
+        }
+
+        function loadAudio() {
+            audioContext = new AudioContext();
+        }
+
+        /*const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioContext = new AudioContext();
+        const audio = document.querySelector('#doh');
+
+        window.addEventListener('load', (event) => {
+            audioContext.resume();
+        });
+    
+    
+        const source = audioContext.createMediaElementSource(audio);
+        source.connect(audioContext.destination);
+    
+        const button = document.querySelector('#button');
+
+    
+        button.addEventListener('click', function() {
+            console.log(audio);
+            audio.play();
+        });
+
+        function dohSound() {
+
+        }*/
+    </script>
+</html>
