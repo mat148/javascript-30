@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>02 -JS Clock</title>
+    </head>
+    <body>
+        <div id="clock">
+            <div class="center">
+                <div id="hour" class="hand"></div>
+                <div id="min" class="hand"></div>
+                <div id="sec" class="hand"></div>
+            </div>
+        </div>
+    </body>
+    <script>
+        const hourEle = document.querySelector('#hour');
+        const minEle = document.querySelector('#min');
+        const secEle = document.querySelector('#sec');
+
+        var currentDate = new Date(Date.now());
+
+        const hourPositionReference = [
+            //12am/pm
+            '0',
+            //1
+            '30',
+            //2
+            '60',
+            //3
+            '90',
+            //4
+            '120',
+            //5
+            '150',
+            //6
+            '180',
+            //7
+            '210',
+            //8
+            '240',
+            //9
+            '270',
+            //10
+            '300',
+            //11
+            '330'
+        ];
+
+        window.addEventListener('load', function() {
+            getTime();
+        });
+
+        function getTime() {
+            var time = calcTime();
+            setTime(time);
+        }
+
+        function calcTime() {
+            let hour = currentDate.getHours();
+            let minutes = currentDate.getMinutes();
+            let seconds = currentDate.getSeconds();
+
+            let period = 'AM';
+
+            //Adjust from 24 hour to 12 hour format
+            if(hour > 12) {
+                hour = hour - 12;
+                period = 'PM';
+            }
+
+            //If hour is 12 its equal to 0 in the hourPos array
+            if(hour === 12) {hour = 0}
+
+            let hourPosition = hourPositionReference[hour];
+
+            //Get the minute position in deg
+            let minutePosition = minutes * 6;
+            //6deg = 1min
+
+            //Get the second position in deg
+            let secondPosition = seconds * 6;
+            //6deg = 1sec
+            
+            return {
+                hour: {
+                    time: hour,
+                    period: period,
+                    position: hourPosition
+                },
+                minutes: {
+                    time: minutes,
+                    position: minutePosition
+                },
+                seconds: {
+                    time: seconds,
+                    position: secondPosition
+                }
+            };
+        }
+
+        function setTime(time) {
+            hourEle.setAttribute('style', `transform: rotate(${time.hour.position}deg)`);
+            minEle.setAttribute('style', `transform: rotate(${time.minutes.position}deg)`);
+            secEle.setAttribute('style', `transform: rotate(${time.seconds.position}deg)`);
+        }
+
+        //const startTime = Date.now();
+
+        setInterval(() => {
+            currentDate = new Date(Date.now());
+            getTime();
+            console.log();
+        }, 1000);
+    </script>
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            margin: 0;
+        }
+
+        #clock {
+            height: 300px;
+            width: 300px;
+            background: grey;
+            border-radius: 50%;
+            position: relative;
+        }
+        #clock .center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .hand {
+            height: 130px;
+            width: 2px;
+            position: absolute;
+            transform-origin: bottom center;
+            background: black;
+            bottom: 0;
+        }
+        .hand#min {
+            height: 100px;
+        }
+        .hand#sec {
+            background: red;
+        }
+    </style>
+</html>
